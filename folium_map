@@ -1,0 +1,380 @@
+#!/usr/bin/env python
+import folium
+from folium.plugins import Draw
+from folium.plugins import Search
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    esri_image_satellite = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+    br_municipios = 'https://raw.githubusercontent.com/tbrugz/geodata-br/master/geojson/geojs-100-mun.json'
+    lat_and_long = [-22.88267, -47.1756]
+    
+    map = folium.Map(
+        location=lat_and_long,
+        tiles=None,
+        zoom_start=14,
+        max_zoom=30,
+        control_scale=True,
+        crs='EPSG3857'
+    )
+
+    folium.TileLayer(
+        'openstreetmap',
+        name='Ruas',
+        attr='Created by Open Street Map'
+    ).add_to(map)
+
+    folium.TileLayer(
+        esri_image_satellite,
+        name='Satélite',
+        attr='Created by ESRI'
+    ).add_to(map)
+
+    folium.TileLayer(
+        'stamenterrain',
+        name='Terreno',
+        attr='Created by Open Street Map'
+    ).add_to(map)
+
+    cities = folium.GeoJson(
+        br_municipios,
+        name='Limites Municipais',
+        style_function=lambda feature: {
+            'fillColor': 'white',
+            'color': 'black',
+            'lineColor': 'white',
+            'weight': 0.5,
+            'fillOpacity': 0,
+            'line_opacity': 0
+        },
+        tooltip=folium.GeoJsonTooltip(
+            fields=['name'],
+            aliases=['Cidade:'],
+            localize=True)
+    ).add_to(map)
+
+    Search(
+        cities,
+        geom_type='Polygon',
+        placeholder='Pesquise uma localidade',
+        collapsed=True,
+        search_label='name',
+        weight=2,
+        position='topleft'
+    ).add_to(map)
+
+    folium.plugins.Draw().add_to(map)
+
+    point_one = folium.Html(
+        '<img src="https://raw.githubusercontent.com/felipe-jpg/Vera_jpg_script/master/point_eleven.jpeg" width="250" height="200">'
+        '<h1>Categoria: </h1>Dificuldade<br><h1>Exemplo: </h1>Itinerário do Ônibus Municipal <br/>'
+        '<audio controls> <source src="https://raw.githubusercontent.com/felipe-jpg/Vera_jpg_script/master/vera_sound.ogg" type="audio/ogg"></audio>',
+        script=True)
+
+    iframe_one = folium.IFrame(
+        point_one,
+        width=300,
+        height=200
+    )
+
+    popup_one = folium.Popup(
+        iframe_one,
+        max_width=400
+    )
+
+    icon_one = folium.Icon(
+        color="green",
+        icon='home'
+    )
+
+    folium.Marker(
+        location=[-22.88267, -47.1756],
+        popup=popup_one,
+        icon=icon_one,
+        tooltip='<i>Escute a Professora Vera<i>'
+    ).add_to(map)
+
+    folium.plugins.MarkerCluster(name='Região do CRAS Novo Angulo', location=[-22.88267, -47.1756], radius=50, popup='Região do CRAS Novo Angulo', line_color='#000000',fill_color='#299eff', show=True).add_to(map)
+
+    point_two = folium.Html(
+        '<img src="https://raw.githubusercontent.com/felipe-jpg/Vera_jpg_script/master/point_two.jpg" width="250" height="200"><h1>Categoria: </h1>União<br><h1>Exemplo: </h1>Evento sobre a saúde da mulher <br/>',
+        script=True)
+
+    iframe_two = folium.IFrame(
+        point_two,
+        width=300,
+        height=200,
+    )
+
+    popup_two = folium.Popup(
+        iframe_two,
+        max_width=400
+    )
+
+    icon_two = folium.Icon(
+        color='lightblue',
+        icon='globe'
+    )
+
+    folium.Marker(
+        location=[-22.8823, -47.17321],
+        popup=popup_two,
+        icon=icon_two
+    ).add_to(map)
+
+    point_three = folium.Html(
+        '<img src="https://raw.githubusercontent.com/felipe-jpg/Vera_jpg_script/master/point_three.jpg" width="250" height="200"><h1>Categoria: </h1>Luta<br><h1>Exemplo: </h1>Reintegração e Luta de posses <br/>',script=True)
+
+    iframe_three = folium.IFrame(
+        point_three,
+        width=300,
+        height=200
+    )
+
+    popup_three = folium.Popup(
+        iframe_three,
+        max_width=400
+    )
+
+    icon_three = folium.Icon(
+        color='pink',
+        icon='globe'
+    )
+
+    folium.Marker(
+        location=[-22.88645, -47.17385],
+        popup=popup_three,
+        icon=icon_three
+    ).add_to(map)
+
+    point_four = folium.Html(
+        '<img src="https://raw.githubusercontent.com/felipe-jpg/Vera_jpg_script/master/point_four.jpg" width="250" height="200">'
+        '<h1>Categoria: </h1>Conquista<br><h1>Exemplo: </h1>Conquista de energia elétrica <br/>',script=True)
+
+    iframe_four = folium.IFrame(
+        point_four,
+        width=300,
+        height=200
+    )
+
+    popup_four = folium.Popup(
+        iframe_four,
+        max_width=400
+    )
+
+    icon_four = folium.Icon(
+        color='black',
+        icon='globe'
+    )
+
+    folium.Marker(
+        location=[-22.88011, -47.2],
+        popup=popup_four,
+        icon=icon_four
+    ).add_to(map)
+
+    point_five = folium.Html(
+        '<img src="https://raw.githubusercontent.com/felipe-jpg/Vera_jpg_script/master/point_five.jpg" width="250" height="200">'
+        '<h1>Categoria: </h1>Conquista<br><h1>Exemplo: </h1>Conquista de energia elétrica <br/>',script=True)
+
+    iframe_five = folium.IFrame(
+        point_five,
+        width=300,
+        height=200
+    )
+
+    popup_five = folium.Popup(
+        iframe_five,
+        max_width=400
+    )
+
+    icon_five = folium.Icon(
+        color='orange',
+        icon='globe'
+    )
+
+    folium.Marker(
+        location=[-22.88011, -47.1674],
+        popup=popup_five,
+        icon=icon_five
+    ).add_to(map)
+
+    point_six = folium.Html(
+        '<img src="https://raw.githubusercontent.com/felipe-jpg/Vera_jpg_script/master/point_six.jpg" width="250" height="200"><h1>Categoria: </h1>Luta<br>/<h1>Exemplo: </h1>Reunião com agentes público <br/>',script=True)
+
+    iframe_six = folium.IFrame(
+        point_six,
+        width=300,
+        height=200
+    )
+
+    popup_six = folium.Popup(
+        iframe_six,
+        max_width=400
+    )
+
+    icon_six = folium.Icon(
+        color='lightred',
+        icon='globe'
+    )
+
+    folium.Marker(
+        location=[-22.87635, -47.18207],
+        popup=popup_six,
+        icon=icon_six
+    ).add_to(map)
+
+    point_seven = folium.Html(
+        '<img src="https://raw.githubusercontent.com/felipe-jpg/Vera_jpg_script/master/point_seven.jpeg" width="250" height="200"><h1>Categoria: </h1><br>/<h1>Exemplo: </h1><br/>',script=True)
+
+    iframe_seven = folium.IFrame(
+        point_seven,
+        width=300,
+        height=200
+    )
+
+    popup_seven = folium.Popup(
+        iframe_seven,
+        max_width=400
+    )
+
+    icon_seven = folium.Icon(
+        color='darkblue',
+        icon='globe'
+    )
+
+    folium.Marker(
+        location=[-22.89269, -47.16515],
+        popup=popup_seven,
+        icon=icon_seven
+    ).add_to(map)
+
+    point_eight = folium.Html(
+        '<img src="https://raw.githubusercontent.com/felipe-jpg/Vera_jpg_script/master/point_eight.jpeg" width="250" height="200"><h1>Categoria: </h1><br>/<h1>Exemplo: </h1><br/>',script=True)
+
+    iframe_eight = folium.IFrame(
+        point_eight,
+        width=300,
+        height=200
+    )
+
+    popup_eight = folium.Popup(
+        iframe_eight,
+        max_width=400
+    )
+
+    icon_eight = folium.Icon(
+        color='green',
+        icon='globe'
+    )
+
+    folium.Marker(
+        location=[-22.8812, -47.1861],
+        popup=popup_eight,
+        icon=icon_eight
+    ).add_to(map)
+
+    point_nine = folium.Html(
+        '<img src="https://raw.githubusercontent.com/felipe-jpg/Vera_jpg_script/master/point_nine.jpeg" width="250" height="200"><h1>Categoria: </h1><br>/<h1>Exemplo: </h1><br/>',script=True)
+
+    iframe_nine = folium.IFrame(
+        point_nine,
+        width=300,
+        height=200
+    )
+
+    popup_nine = folium.Popup(
+        iframe_nine,
+        max_width=400
+    )
+
+    icon_nine = folium.Icon(
+        color='red',
+        icon='globe'
+    )
+
+    folium.Marker(
+        location=[-22.8646, -47.1818],
+        popup=popup_nine,
+        icon=icon_nine
+    ).add_to(map)
+
+    point_ten = folium.Html(
+        '<img src="https://raw.githubusercontent.com/felipe-jpg/Vera_jpg_script/master/point_ten.jpeg" width="250" height="200"><h1>Categoria: </h1><br>/<h1>Exemplo: </h1><br/>',script=True)
+
+    iframe_ten = folium.IFrame(
+        point_ten,
+        width=300,
+        height=200
+    )
+
+    popup_ten = folium.Popup(
+        iframe_ten,
+        max_width=400
+    )
+
+    icon_ten = folium.Icon(
+        color='red',
+        icon='globe'
+    )
+
+    folium.Marker(
+        location=[-22.8698, -47.1622],
+        popup=popup_ten,
+        icon=icon_ten
+    ).add_to(map)
+
+    folium.map.LayerControl(
+        position='topright',
+        collapsed=True,
+        autoZIndex=True
+    ).add_to(map)
+
+    folium.plugins.MeasureControl(
+        position='topright',
+        primary_length_unit='meters',
+        secondary_length_unit='kilometers',
+        primary_area_unit='sqmeters',
+        secondary_area_unit='kilometers'
+    ).add_to(map)
+
+    folium.plugins.MiniMap(
+        tile_layer='stamenterrain',
+        position='bottomright',
+        width=150,
+        height=100,
+        collapsed_width=25,
+        collapsed_height=25,
+        zoom_level_offset=- 5,
+        zoom_level_fixed=None,
+        center_fixed=False,
+        zoom_animation=False,
+        toggle_display=False,
+        auto_toggle_display=False,
+        minimized=False
+    ).add_to(map)
+
+    folium.plugins.LocateControl(
+        strings={'title': 'Veja sua localização atual'},
+        drawCircle=True,
+        drawMarker=True,
+        auto_start=False,
+        initialZoomLevel=10
+    ).add_to(map)
+
+    folium.plugins.PolyLineOffset(
+        [[-22.88267, -47.1756], [-22.89269, -47.16515]],
+        color="red", 
+        opacity=1, 
+        offset=-5
+    ).add_to(map)
+
+    map.add_child(folium.LatLngPopup())
+    return map._repr_html_()
+   
+   
+   if __name__ == '__main__':
+    app.run(debug=False)
